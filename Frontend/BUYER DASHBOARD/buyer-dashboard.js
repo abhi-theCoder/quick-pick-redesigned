@@ -601,65 +601,7 @@ document.addEventListener("DOMContentLoaded", function () {
     return parseFloat(num).toFixed(2);
   }
 
-  function updateCartUI() {
-    const cartItemsEl = document.getElementById("cart-items");
-    const emptyCartMessage = document.getElementById("empty-cart-message");
-    // const cartCountEl = document.getElementById("cart-count"); // optional
-
-    if (!cartItemsEl) return;
-
-    cartItemsEl.innerHTML = "";
-    if (cart.length === 0) {
-      emptyCartMessage.classList.remove("d-none");
-      // if (cartCountEl) cartCountEl.textContent = 0;
-    } else {
-      emptyCartMessage.classList.add("d-none");
-      cart.forEach((item) => {
-        cartItemsEl.insertAdjacentHTML(
-          "beforeend",
-          `<div class="col">
-                    <div class="card shadow-sm p-3 h-100">
-                        <div class="d-flex justify-content-between align-items-start">
-                            <h6 class="mb-1">${item.name}</h6>
-                            <button class="btn btn-sm btn-link text-danger p-0 btn-remove-item" data-product-id="${
-                              item.id
-                            }">&times;</button>
-                        </div>
-                        <p class="mb-1 small text-muted">₹${formatCurrency(
-                          item.price
-                        )} each</p>
-                        <div class="d-flex align-items-center justify-content-between mt-auto">
-                            <div class="input-group input-group-sm" style="width:110px;">
-                                <button class="btn btn-outline-secondary btn-decrease-qty" data-product-id="${
-                                  item.id
-                                }" type="button">-</button>
-                                <input type="text" class="form-control text-center cart-item-qty" data-product-id="${
-                                  item.id
-                                }" value="${item.qty}">
-                                <button class="btn btn-outline-secondary btn-increase-qty" data-product-id="${
-                                  item.id
-                                }" type="button">+</button>
-                            </div>
-                            <div class="text-end fw-bold">₹${formatCurrency(
-                              item.qty * item.price
-                            )}</div>
-                        </div>
-                    </div>
-                </div>`
-        );
-      });
-    }
-
-    // Update totals in your summary section
-    const totalItemsEl = document.getElementById("cart-total-items");
-    const totalPriceEl = document.getElementById("cart-total-price");
-    if (totalItemsEl && totalPriceEl) {
-      const totalItems = cart.reduce((sum, i) => sum + i.qty, 0);
-      const totalPrice = cart.reduce((sum, i) => sum + i.qty * i.price, 0);
-      totalItemsEl.textContent = totalItems;
-      totalPriceEl.textContent = totalPrice.toFixed(2);
-    }
-  }
+ 
   function updateCartUI() {
     const cartItemsEl = document.getElementById("cart-items");
     const emptyCartMessage = document.getElementById("empty-cart-message");
@@ -870,3 +812,4 @@ document.addEventListener("DOMContentLoaded", function () {
 
   initializeBuyerDashboard();
 });
+
