@@ -1,15 +1,15 @@
 const mongoose = require('mongoose');
 
 const chatRoomSchema = new mongoose.Schema({
-    participants: [{ 
+    participants: [{
         type: mongoose.Schema.Types.ObjectId,
         required: true
     }],
-    participantRoles: { 
+    participantRoles: {
         buyerId: { type: mongoose.Schema.Types.ObjectId, ref: 'Customer' },
         sellerId: { type: mongoose.Schema.Types.ObjectId, ref: 'Seller' }
     },
-    productId: { 
+    productId: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Product'
     },
@@ -41,11 +41,12 @@ const chatRoomSchema = new mongoose.Schema({
         type: Date,
         default: Date.now
     }
-}, { timestamps: true }); 
+}, { timestamps: true });
 
-chatRoomSchema.index({ participants: 1 }, { unique: true });
+chatRoomSchema.index({ participants: 1 }); // Non-unique index for lookup
+chatRoomSchema.index({ 'participantRoles.buyerId': 1, 'participantRoles.sellerId': 1 }, { unique: true }); // Unique compound index
 
-chatRoomSchema.pre('save', function(next) {
+chatRoomSchema.pre('save', function (next) {
     if (this.isModified('participants')) {
         this.participants.sort((a, b) => a.toString().localeCompare(b.toString()));
     }

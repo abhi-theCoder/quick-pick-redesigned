@@ -15,7 +15,7 @@ module.exports = (io) => {
 
                 const chatRoom = await ChatRoom.findById(chatId);
                 if (chatRoom) {
-                    const userId = socket.handshake.query.userId; 
+                    const userId = socket.handshake.query.userId;
                     const userRole = socket.handshake.query.userRole;
 
                     if (userId) {
@@ -37,6 +37,11 @@ module.exports = (io) => {
             } catch (error) {
                 console.error('Error marking messages as read on join:', error);
             }
+        });
+
+        socket.on('leaveChat', (chatId) => {
+            socket.leave(chatId);
+            console.log(`User ${socket.id} left chat room: ${chatId}`);
         });
 
         socket.on('sendMessage', async (message) => {
@@ -73,7 +78,7 @@ module.exports = (io) => {
                 const newMessage = new Message({
                     chatRoom: message.chatId,
                     sender: message.senderId,
-                    senderModel: senderModel,  
+                    senderModel: senderModel,
                     text: message.text,
                     timestamp: new Date()
                 });
@@ -92,15 +97,15 @@ module.exports = (io) => {
                     chatRoom.buyerUnreadCount += 1;
                     chatRoom.sellerUnreadCount = 0;
                 }
-                
-                await chatRoom.save(); 
+
+                await chatRoom.save();
                 io.to(chatRoom._id.toString()).emit('receiveMessage', {
                     id: newMessage._id,
                     chatRoom: chatRoom._id.toString(),
                     sender: newMessage.sender.toString(),
                     text: newMessage.text,
                     timestamp: newMessage.timestamp.toISOString(),
-                    senderModel: newMessage.senderModel 
+                    senderModel: newMessage.senderModel
                 });
 
             } catch (error) {

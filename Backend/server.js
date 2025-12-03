@@ -10,6 +10,8 @@ const authRoutes = require('./routes/auth');
 const adminRoutes = require('./routes/adminRoutes');
 const productRoutes = require('./routes/productRoutes');
 const chatRoutes = require('./routes/chatRoutes');
+const cartRoutes = require('./routes/cartRoutes');
+const orderRoutes = require('./routes/orderRoutes');
 const socketIoHandler = require('./socketIoHandler');
 const recommendationRoutes = require('./routes/recommendationRoutes');
 const app = express();
@@ -23,6 +25,8 @@ app.use('/api', authRoutes);
 app.use('/api/admin', adminRoutes);
 app.use('/api/products', productRoutes);
 app.use('/api/chat', chatRoutes);
+app.use('/api/cart', cartRoutes);
+app.use('/api/orders', orderRoutes);
 app.use('/api/recommendations', recommendationRoutes);
 app.use('/api/ai-chat', require('./routes/aiChatbotRoutes'));
 app.get('/', (req, res) => {
@@ -36,7 +40,7 @@ const io = new Server(server, {
     },
 });
 
- socketIoHandler(io);
+socketIoHandler(io);
 
 const startServer = async () => {
     try {
@@ -50,7 +54,7 @@ const startServer = async () => {
     } catch (err) {
         console.error('MongoDB Connection Failed:', err.message);
         console.error(err.stack);
-        process.exit(1); 
+        process.exit(1);
     }
 };
 
