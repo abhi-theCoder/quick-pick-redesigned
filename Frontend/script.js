@@ -56,11 +56,74 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
     // Floating chat button interaction
+    // Floating chat button interaction with AI integration
     const chatBtn = document.querySelector('.floating-chat-btn');
-    
-    chatBtn.addEventListener('click', function() {
-        alert("Chat feature will be available soon!");
+    const chatbox = document.querySelector('.chatbox-container');
+    const closeChat = document.querySelector('.close-chat');
+    const sendBtn = document.querySelector('.send-btn');
+    const input = document.querySelector('.chatbox-footer input');
+    const chatBody = document.querySelector('.chatbox-body');
+
+    // Open chatbox with animation
+    chatBtn.addEventListener('click', () => {
+        chatbox.classList.remove('hidden', 'animate__fadeOutDown');
+        chatbox.classList.add('animate__fadeInUp');
     });
+
+    // Close chatbox
+    closeChat.addEventListener('click', () => {
+        chatbox.classList.remove('animate__fadeInUp');
+        chatbox.classList.add('animate__fadeOutDown');
+        setTimeout(() => chatbox.classList.add('hidden'), 500);
+    });
+
+    // Handle sending message
+    sendBtn.addEventListener('click', sendMessage);
+    input.addEventListener('keypress', (e) => {
+    if (e.key === 'Enter') sendMessage();
+    });
+
+    function appendMessage(text, type) {
+    const msg = document.createElement('div');
+    msg.classList.add('message', type);
+    msg.textContent = text;
+    chatBody.appendChild(msg);
+    chatBody.scrollTop = chatBody.scrollHeight;
+    }
+
+    async function sendMessage() {
+    const userMsg = input.value.trim();
+    if (!userMsg) return;
+
+    appendMessage(userMsg, 'user');
+    input.value = '';
+    chatBody.scrollTop = chatBody.scrollHeight;
+
+    // Show typing animation
+    const loadingMsg = document.createElement('div');
+    loadingMsg.classList.add('message', 'bot');
+    loadingMsg.innerHTML = "🤖 <em>Typing...</em>";
+    chatBody.appendChild(loadingMsg);
+    chatBody.scrollTop = chatBody.scrollHeight;
+
+    try {
+        // Send message to backend via Axios
+        const response = await axios.post(`${BACKEND_URL}/api/ai-chat`, { message: userMsg });
+
+        // Remove typing animation
+        loadingMsg.remove();
+
+        // Display AI reply
+        const botReply = response.data.reply || "Sorry, I couldn’t understand that.";
+        appendMessage(botReply, 'bot');
+
+    } catch (error) {
+        loadingMsg.remove();
+        appendMessage("⚠️ Error contacting AI server.", 'bot');
+        console.error(error);
+    }
+    }
+
 
     // Smooth scrolling for anchor links
     document.querySelectorAll('a[href^="#"]').forEach(anchor => {

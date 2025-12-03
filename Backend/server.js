@@ -24,6 +24,7 @@ app.use('/api/admin', adminRoutes);
 app.use('/api/products', productRoutes);
 app.use('/api/chat', chatRoutes);
 app.use('/api/recommendations', recommendationRoutes);
+app.use('/api/ai-chat', require('./routes/aiChatbotRoutes'));
 app.get('/', (req, res) => {
     res.send('QuickPick Backend API is running!');
 });
