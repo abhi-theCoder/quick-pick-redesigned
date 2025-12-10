@@ -79,7 +79,7 @@ document.addEventListener('DOMContentLoaded', function () {
         const token = getToken();
         if (!token) {
             console.error('No authentication token found. Redirecting to login.');
-            window.location.href = `${window.origin}/Frontend/Register-login/register-login.html`; // Redirect to login
+            window.location.href = `${window.origin}${getBasePath()}/Register-login/register-login.html`; // Redirect to login
             return null;
         }
 
@@ -107,7 +107,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     console.error('Unauthorized or forbidden access. Redirecting to login.');
                     localStorage.removeItem('quickpickToken');
                     localStorage.removeItem('quickpickUser');
-                    window.location.href = `${window.origin}/Frontend/Register-login/register-login.html`;
+                    window.location.href = `${window.origin}${getBasePath()}/Register-login/register-login.html`;
                     return null; // Stop further processing if redirected
                 }
                 throw new Error(data.message || `API Error: ${response.statusText}`);
@@ -124,13 +124,13 @@ document.addEventListener('DOMContentLoaded', function () {
         const user = getUserData();
         if (!user || user.role !== 'seller') {
             console.error('User is not a seller or not logged in. Redirecting.');
-            window.location.href = `${window.origin}/Frontend/Register-login/register-login.html`;
+            window.location.href = `${window.origin}${getBasePath()}/Register-login/register-login.html`;
             return false;
         }
         if (!user.isApproved) {
             console.warn('Seller account is not approved. Redirecting.');
             alert('Your seller account is pending admin approval.'); // Provide user feedback
-            window.location.href = `${window.origin}/Frontend/Register-login/register-login.html`;
+            window.location.href = `${window.origin}${getBasePath()}/Register-login/register-login.html`;
             return false;
         }
         currentUserId = user.id; // Store the seller's ID
@@ -477,7 +477,7 @@ document.addEventListener('DOMContentLoaded', function () {
         if (socket) {
             socket.disconnect(); // Disconnect socket on logout
         }
-        window.location.href = `${window.origin}/Frontend/Register-login/register-login.html`;
+        window.location.href = `${window.origin}${getBasePath()}/Register-login/register-login.html`;
     });
 
     // Sidebar navigation clicks
