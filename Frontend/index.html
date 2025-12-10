@@ -498,11 +498,11 @@
                         if (user && user.role) {
                             switch (user.role) {
                                 case 'buyer':
-                                    redirectPath = '/BUYER%20DASHBOARD/index.html';
+                                    redirectPath = `${getBasePath()}/BUYER%20DASHBOARD/index.html`;
                                     break;
                                 case 'seller':
                                     if (user.isApproved) { 
-                                        redirectPath = '/SELLER%20DASHBOARD/index.html';
+                                        redirectPath = `${getBasePath()}/SELLER%20DASHBOARD/index.html`;
                                     } else {
                                         
                                         console.warn('Seller account pending approval. Not redirecting to dashboard.');
@@ -512,10 +512,10 @@
                                     break;
                                 case 'admin':
                                 case 'superadmin':
-                                    redirectPath = '/ADMIN%20DASHBOARD/index.html';
+                                    redirectPath = `${getBasePath()}/ADMIN%20DASHBOARD/index.html`;
                                     break;
                                 default:
-                                    redirectPath = '/COMMON_DASHBOARD/index.html';
+                                    redirectPath = `${getBasePath()}/COMMON_DASHBOARD/index.html`;
                                     break;
                             }
 
