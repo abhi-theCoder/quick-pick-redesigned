@@ -1,6 +1,6 @@
 document.addEventListener('DOMContentLoaded', function () {
-    const BACKEND_URL = 'http://localhost:5001'; // Your backend Express URL
-    const SOCKET_IO_URL = 'http://localhost:5001'; // Your Socket.IO server URL (usually same as backend)
+    // const BACKEND_URL = 'http://localhost:5001'; // Your backend Express URL
+    // const SOCKET_IO_URL = 'http://localhost:5001'; // Your Socket.IO server URL (usually same as backend)
 
     const sidebarLinks = document.querySelectorAll('.sidebar-link');
     const contentSections = document.querySelectorAll('.content-section');

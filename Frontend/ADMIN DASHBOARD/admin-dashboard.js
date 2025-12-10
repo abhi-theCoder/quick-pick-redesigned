@@ -1,6 +1,6 @@
 // Frontend/ADMIN DASHBOARD/script.js
 document.addEventListener('DOMContentLoaded', function() {
-    const BACKEND_URL = 'http://localhost:5001'; // Your backend Express URL
+    // const BACKEND_URL = 'http://localhost:5001'; // Your backend Express URL
 
     // --- DOM Elements ---
     const sidebarLinks = document.querySelectorAll('.sidebar-link');

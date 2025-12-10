@@ -1,6 +1,6 @@
 document.addEventListener('DOMContentLoaded', function() {
-    const BACKEND_URL = 'http://localhost:5001'; 
-    const SOCKET_IO_URL = 'http://localhost:5001'; 
+    // const BACKEND_URL = 'http://localhost:5001'; 
+    // const SOCKET_IO_URL = 'http://localhost:5001'; 
 
     const sidebarLinks = document.querySelectorAll('.sidebar-link');
     const contentSections = document.querySelectorAll('.content-section');
