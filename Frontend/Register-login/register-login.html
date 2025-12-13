@@ -440,12 +440,12 @@
                         if (data.user && data.user.role) {
                             switch (data.user.role) {
                                 case 'buyer':
-                                    redirectPath = '/Frontend/BUYER%20DASHBOARD/index.html';
+                                    redirectPath = `${getBasePath()}/BUYER%20DASHBOARD/index.html`;
                                     break;
                                 case 'seller':
                                     // Check if seller is approved before redirecting to dashboard
                                     if (data.user.isApproved) {
-                                        redirectPath = '/Frontend/SELLER%20DASHBOARD/index.html'; // Assuming a Seller Dashboard path
+                                        redirectPath = `${getBasePath()}/SELLER%20DASHBOARD/index.html`; // Assuming a Seller Dashboard path
                                     } else {
                                         displayMessage(loginMessageDiv, 'Your seller account is pending admin approval. You cannot access the dashboard yet.', 'warning');
                                         // Don't redirect, just show message
@@ -453,14 +453,14 @@
                                     }
                                     break;
                                 case 'admin':
-                                    redirectPath = '/Frontend/ADMIN%20DASHBOARD/index.html'; // Assuming an Admin Dashboard path
+                                    redirectPath = `${getBasePath()}/ADMIN%20DASHBOARD/index.html`; // Assuming an Admin Dashboard path
                                     break;
                                 default:
-                                    redirectPath = '/Frontend/COMMON_DASHBOARD/index.html'; // Default if role is unknown or not set
+                                    redirectPath = `${getBasePath()}/COMMON_DASHBOARD/index.html`; // Default if role is unknown or not set
                                     break;
                             }
                         } else {
-                            redirectPath = '/Frontend/COMMON_DASHBOARD/index.html'; // Fallback if no role is provided
+                            redirectPath = `${getBasePath()}/COMMON_DASHBOARD/index.html`; // Fallback if no role is provided
                         }
 
                         // Perform redirection after a short delay
