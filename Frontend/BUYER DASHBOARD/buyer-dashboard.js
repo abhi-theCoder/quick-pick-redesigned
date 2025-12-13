@@ -8,11 +8,9 @@ document.addEventListener('DOMContentLoaded', function () {
 
     const allProductsGrid = document.getElementById('all-products-grid');
     const noAllProductsMessage = document.getElementById('no-all-products-message');
-    const recommendationProductNameInput = document.getElementById('recommendation-product-name');
-    const getRecommendationBtn = document.getElementById('get-recommendation-btn');
-    const recommendationResultDiv = document.getElementById('recommendation-result');
-    const recommendationLoadingDiv = document.getElementById('recommendation-loading');
-    const recommendationMessageContainer = document.getElementById('recommendation-message-container');
+    // Removed old recommendation elements references
+    const recommendationModalElement = document.getElementById('recommendationModal');
+    const recommendationModal = recommendationModalElement ? new bootstrap.Modal(recommendationModalElement) : null;
 
     const messagesSidebarLink = document.getElementById('messages-sidebar-link');
     const totalUnreadMessagesBadge = document.getElementById('total-unread-messages');
@@ -267,6 +265,9 @@ document.addEventListener('DOMContentLoaded', function () {
                 const productCard = `
                     <div class="col">
                         <div class="product-card">
+                            <div class="product-card-ai-badge btn-get-ai-opinion" data-product-name="${product.name}">
+                                <i class="bi bi-stars"></i> Get AI Opinion
+                            </div>
                             <img src="${imageUrl}" class="card-img-top" alt="${product.name}" onerror="this.onerror=null;this.src='https://placehold.co/400x300/E0E0E0/333333?text=No+Image';">
                             <div class="product-card-body">
                                 <h5 class="product-card-title">${product.name}</h5>
@@ -450,32 +451,36 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
-    async function getRecommendation() {
-        const productName = recommendationProductNameInput.value.trim();
-        if (!productName) {
-            showTemporaryMessage(recommendationMessageContainer, 'Please enter a product name to get a recommendation.', 'warning');
-            recommendationResultDiv.classList.add('hidden');
-            return;
-        }
+    async function getRecommendation(productName) {
+        const modalLoading = document.getElementById('modal-recommendation-loading');
+        const modalContent = document.getElementById('modal-recommendation-content');
 
-        recommendationResultDiv.classList.add('hidden');
-        recommendationMessageContainer.innerHTML = '';
-        recommendationLoadingDiv.style.display = 'block';
+        // Reset modal state
+        modalLoading.classList.remove('d-none');
+        modalContent.classList.add('d-none');
+        modalContent.innerHTML = '';
 
         try {
             const data = await fetchData('/api/recommendations/product', 'POST', { productName });
 
             if (data && data.recommendation) {
-                recommendationResultDiv.innerHTML = `<strong>AI Recommendation for "${productName}":</strong><br>${data.recommendation}`;
-                recommendationResultDiv.classList.remove('hidden');
+                modalContent.innerHTML = `
+                    <div class="ai-recommendation-box">
+                        <div class="ai-recommendation-title">Analysis for "${productName}"</div>
+                        <div class="ai-recommendation-text">${data.recommendation}</div>
+                    </div>
+                `;
+                modalContent.classList.remove('d-none');
             } else {
-                showTemporaryMessage(recommendationMessageContainer, 'Could not get a recommendation at this time. Please try again.', 'danger');
+                modalContent.innerHTML = '<div class="alert alert-warning">Could not get a recommendation at this time.</div>';
+                modalContent.classList.remove('d-none');
             }
         } catch (error) {
-            console.error('Error fetching AI recommendation from backend:', error);
-            showTemporaryMessage(recommendationMessageContainer, 'Failed to fetch AI recommendation. Network error or backend issue.', 'danger');
+            console.error('Error fetching AI recommendation:', error);
+            modalContent.innerHTML = '<div class="alert alert-danger">Failed to fetch recommendation.</div>';
+            modalContent.classList.remove('d-none');
         } finally {
-            recommendationLoadingDiv.style.display = 'none';
+            modalLoading.classList.add('d-none');
         }
     }
 
@@ -698,7 +703,7 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     });
 
-    getRecommendationBtn.addEventListener('click', getRecommendation);
+    // Removed old recommendation button listener
 
     // Cart event listeners
     if (checkoutBtn) {
@@ -734,6 +739,12 @@ document.addEventListener('DOMContentLoaded', function () {
                 chatHeaderName.textContent = sellerName;
                 chatHeaderProduct.textContent = productId ? `(Product: ${productId.substring(0, 8)}...)` : '';
                 loadMessages(chatId);
+            }
+        } else if (target.classList.contains('btn-get-ai-opinion')) {
+            const productName = target.dataset.productName;
+            if (recommendationModal) {
+                recommendationModal.show();
+                getRecommendation(productName);
             }
         }
     });
