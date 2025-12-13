@@ -50,7 +50,11 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     function showTemporaryMessage(targetElement, message, type = 'info', duration = 3000) {
-        targetElement.innerHTML = '';
+        // Remove any existing alerts to prevent stacking
+        const existingAlert = targetElement.querySelector('.alert');
+        if (existingAlert) {
+            existingAlert.remove();
+        }
 
         const alertDiv = document.createElement('div');
         const typeClasses = {
@@ -65,7 +69,7 @@ document.addEventListener('DOMContentLoaded', function () {
             ${message}
             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         `;
-        targetElement.appendChild(alertDiv);
+        targetElement.prepend(alertDiv);
 
         setTimeout(() => {
             if (alertDiv.classList.contains('show')) {
