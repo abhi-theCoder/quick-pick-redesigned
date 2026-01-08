@@ -9,7 +9,7 @@ let fetch;
 })();
 
 const GEMINI_API_KEY_FOR_Recommendation = process.env.GEMINI_API_KEY_FOR_Recommendation || "";
-const GEMINI_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${GEMINI_API_KEY_FOR_Recommendation}`;
+const GEMINI_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:generateContent?key=${GEMINI_API_KEY_FOR_Recommendation}`;
 
 router.post(
     '/product',
